@@ -35,7 +35,7 @@ class StudentRegistrationUni(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE, null=True,blank=True)
     religion = models.CharField(max_length=120, null=True,blank=True)
     nationality = models.CharField(max_length=120, null=True,blank=True)
-
+    profile_picture = models.ImageField(upload_to= 'profile_image', null=True, blank=True)
     def __str__(self):
         return self.student_id
     class Meta:
@@ -72,7 +72,8 @@ class StudentRegistrationCollage(models.Model):
     group = models.CharField(max_length=120, null=True, choices=GROUPS)
     religion = models.CharField(max_length=120, null=True)
     nationality = models.CharField(max_length=120, null=True)
-
+    profile_picture = models.ImageField(upload_to= 'profile_image', null=True, blank=True)
+    
     def __str__(self):
         return self.student_id
     class Meta:
@@ -92,14 +93,16 @@ class Enroll(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
     enroll_year = models.IntegerField(blank=True, null=True)
     enroll_semester = models.IntegerField(blank=True, null=True)
-
+    def __str__(self):
+       return f'{self.student.student_id} - {self.course.course_code} ({self.enroll_year}year {self.enroll_semester}semester)'
 
 class Result(models.Model):
     student = models.ForeignKey(StudentRegistrationUni, on_delete=models.CASCADE, null=True)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
+    enroll_course = models.ForeignKey(Enroll, on_delete=models.CASCADE, null=True)
     grade_point = models.FloatField(null=True)
     grade_letter = models.CharField(max_length=5, null=True)
-
+    def __str__(self):
+        return f'{self.student.student_id} - {self.grade_point} ({self.grade_letter})'
 
 class Financial(models.Model):
     student = models.ForeignKey(StudentRegistrationUni, on_delete=models.CASCADE, null=True)

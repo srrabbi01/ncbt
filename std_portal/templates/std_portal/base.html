@@ -21,9 +21,7 @@
     <title>N. CBT Studen Portal | {% block title %}Home{% endblock title %}</title>
 </head>
 
-<body class="show-sidebar">
-
-
+<body>
     <aside class="sidebar">
         <div class="toggle">
             <a href="#" class="burger js-menu-toggle" data-toggle="collapse" data-target="#main-navbar">
@@ -33,8 +31,15 @@
         <div class="side-inner">
 
             <div class="profile">
-                <img src="https://cdn.pixabay.com/photo/2021/10/31/09/25/animal-6756751_960_720.jpg" alt="Image"
-                    class="img-fluid">
+                {% if student == 'uni' %}
+                <img src="{% if request.user.studentregistrationuni.profile_picture %}{{ request.user.studentregistrationuni.profile_picture.url }}{% else %}{% static 'assets/images/default_avatar.png' %}{% endif %}"
+                    alt="Image" class="img-fluid">
+                {% endif %}
+
+                {% if student == 'clg' %}
+                <img src="{% if request.user.studentregistrationcollage.profile_picture %}{{ request.user.studentregistrationcollage.profile_picture.url }}{% else %}{% static 'assets/images/default_avatar.png' %}{% endif %}"
+                    alt="Image" class="img-fluid">
+                {% endif %}
                 <h3 class="name">Craig David</h3>
                 <span class="country">Web Designer</span>
             </div>
@@ -71,7 +76,7 @@
     </aside>
     <main>
         <div class="site-section">
-            <div class="container">
+            <div class="container" style="max-width: 1400px;">
                 {% block main %}
                 {% endblock main %}
             </div>

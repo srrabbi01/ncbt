@@ -126,6 +126,8 @@ aside .side-inner .profile img {
   aspect-ratio: 1/1;
   margin: 0 auto 20px auto;
   border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 aside .side-inner .profile .name {
@@ -260,8 +262,8 @@ main {
 }
 
 .show-sidebar main {
-  -webkit-transform: translateX(300px);
-          transform: translateX(300px);
+  -webkit-transform: translateX(150px);
+          transform: translateX(150px);
 }
 
 main .post-entry {

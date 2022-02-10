@@ -22,8 +22,10 @@ def financial_view(request):
 @login_required(login_url='login')
 def result_view(request):
     resultObjs = Result.objects.filter(student = request.user.studentregistrationuni)
+    retakeObjs = resultObjs.filter(grade_point = 0.0)
     context = {
-        'resultobjs':resultObjs
+        'resultobjs':resultObjs,
+        'retakeobjs':retakeObjs,
     }
     return render(request,'std_portal/result.html',context)
 
