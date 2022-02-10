@@ -1,6 +1,7 @@
+from datetime import date
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.utils.timezone import now
 
 class Department(models.Model):
     department_name = models.CharField(max_length=120, null=True)
@@ -57,7 +58,7 @@ class StudentRegistrationCollage(models.Model):
         ('arts', 'Humanities / Arts'),
     )
 
-    user = models.OneToOneField(User, parent_link=True, on_delete=models.CASCADE, null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     student_id = models.CharField(max_length=120, null=True, unique=True)
     name = models.CharField(max_length=120, null=True)
     email = models.CharField(max_length=120, null=True)
@@ -79,32 +80,36 @@ class StudentRegistrationCollage(models.Model):
         verbose_name_plural = 'Student Registration (HSC)'
 
 class Course(models.Model):
-
     department = models.ForeignKey(Department, on_delete=models.CASCADE, null=True)
     course_name = models.CharField(max_length=120, null=True)
     course_code = models.CharField(max_length=120, null=True)
-    credit = models.FloatField(null=True)
-
+    course_credit = models.FloatField(null=True)
+    def __str__(self):
+        return f'{self.course_code} {self.course_name} - {self.department.department_name}'
 
 class Enroll(models.Model):
     student = models.ForeignKey(StudentRegistrationUni, on_delete=models.CASCADE, null=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
-    enroll_year = models.DateField(blank=True, null=True)
+    enroll_year = models.IntegerField(blank=True, null=True)
+    enroll_semester = models.IntegerField(blank=True, null=True)
 
 
 class Result(models.Model):
     student = models.ForeignKey(StudentRegistrationUni, on_delete=models.CASCADE, null=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
-    course_grade = models.FloatField(null=True)
+    grade_point = models.FloatField(null=True)
+    grade_letter = models.CharField(max_length=5, null=True)
 
 
 class Financial(models.Model):
     student = models.ForeignKey(StudentRegistrationUni, on_delete=models.CASCADE, null=True)
-    semester = models.CharField(max_length=120, null=True)
-    payment_date = models.DateField(null=True, blank=True)
-    payment_amount = models.FloatField(null=True)
+    year = models.IntegerField(null=True)
+    semester = models.IntegerField(null=True)
+    payment_date = models.DateField(null=True,default=now)
+    payment_amount = models.FloatField(null=True,default=0.0)
     money_receipt_no = models.CharField(max_length=120, null=True)
-
+    def __str__(self):
+        return f'Payment of #{self.student.student_id} - {self.year}year {self.semester}semester'
 
 class Contact(models.Model):
     name = models.CharField(max_length=122)
